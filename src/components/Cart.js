@@ -1,23 +1,33 @@
 import React, { PureComponent } from "react";
 import "../styles.css";
-
+import store from '../redux/store';
+import { connect } from 'react-redux';
 import CartItem from './CartItem';
 
 class Cart extends PureComponent {
-  state = {
-    cartGoods: []
-  }
+  // state = {
+  //   cartGoods: []
+  // }
+
+  // componentDidMount() {
+  //   store.subscribe(() => {
+  //     const globalState = store.getState();
+  //     this.setState({ cartGoods: globalState.card})
+  //   })
+  // }
+
   getTotal() {
-    const { cartGoods } = this.state;
-    return cartGoods.reduce((acc, item) => acc + item.price, 0);
+    // const { cartGoods } = this.state;
+
+    return this.props.cartGoods.reduce((acc, item) => acc + item.price, 0);
   }
   render() {
     return (
       <div className="cart">
         <h2 className="cart__title" >Shopping Cart</h2>
-        { this.state.cartGoods.length ?
+        { this.props.cartGoods.length ?
           <ul className="cart__list">
-            {this.state.cartGoods.map((item, index) => (
+            {this.props.cartGoods.map((item, index) => (
               <li className="cart__list-item" key={index}>
                 <CartItem {...item} />
               </li>
@@ -33,4 +43,13 @@ class Cart extends PureComponent {
   }
 }
 
-export default Cart;
+const mapStateToProps = (state) => {
+  return {
+    cartGoods: state.cartGoods
+  }
+};
+
+
+export default connect(mapStateToProps, '')(Cart);
+
+
